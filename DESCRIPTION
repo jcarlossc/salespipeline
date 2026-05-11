@@ -21,4 +21,5 @@ Suggests:
 Config/testthat/edition: 3
 Imports: 
     glue,
-    logger
+    logger,
+    yaml
