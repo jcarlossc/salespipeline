@@ -1,0 +1,13 @@
+logging:
+  level: "TRACE"
+  console: true
+  overwrite: false
+
+format:
+  timestamp: true
+  timezone: "America/Recife"
+  format: "[{time}] {level} - {msg}"
+
+logs:
+  file: "logs/app.log"
+
