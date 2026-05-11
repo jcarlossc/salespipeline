@@ -3,3 +3,4 @@
 export(get_log_level)
 export(read_yaml_safe)
 export(retry_manual)
+export(safe_run)
