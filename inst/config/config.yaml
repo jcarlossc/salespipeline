@@ -1,0 +1,14 @@
+app:
+  name: "Sales Pipeline"
+  version: "1.0"
+
+database:
+  type: "mysql"
+  retries: 3
+  timeout: 5
+
+tables:
+  product: "produto"
+  sales: "vendas"
+  seller: "vendedor"
+
