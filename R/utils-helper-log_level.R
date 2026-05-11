@@ -1,5 +1,33 @@
 library(glue)
 
+#' Converte texto em nível de log
+#'
+#' Converte uma string em um nível compatível com o pacote
+#' \pkg{logger}. O valor recebido é normalizado com remoção
+#' de espaços em branco e conversão para maiúsculas.
+#'
+#' Níveis aceitos:
+#' \code{"TRACE"}, \code{"DEBUG"}, \code{"INFO"},
+#' \code{"WARN"}, \code{"ERROR"} e \code{"FATAL"}.
+#'
+#' @param level_str Uma string contendo o nível de log.
+#'
+#' @return Um objeto de nível de log do pacote
+#' \pkg{logger}.
+#'
+#' @details
+#' Se o valor informado não corresponder a um nível válido,
+#' a função gera erro.
+#'
+#' @examples
+#' get_log_level("INFO")
+#' get_log_level(" debug ")
+#'
+#' @seealso
+#' \code{\link[logger]{log_info}},
+#' \code{\link[logger]{log_error}}
+#'
+#' @export
 get_log_level <- function(level_str) {
 
   # --------------------------------------------------------
