@@ -1,0 +1,26 @@
+.Rproj.user/
+.Rhistory
+.RData
+.Ruserdata
+
+# renv
+renv/library/
+renv/staging/
+
+# logs
+logs/
+*.log
+
+# dados processados
+data/processed/
+
+# relatórios renderizados
+reports/*.html
+reports/*.pdf
+
+# shiny runtime
+shiny/.Rhistory
+
+# sistema operacional
+.DS_Store
+Thumbs.db
