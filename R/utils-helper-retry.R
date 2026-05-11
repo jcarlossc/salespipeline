@@ -2,6 +2,32 @@ library(logger)
 library(glue)
 library(yaml)
 
+#' Executa uma função com tentativas de repetição
+#'
+#' Executa uma função e repete a tentativa em caso de falhas transitórias.
+#' Erros de validação são tratados como falhas definitivas e interrompem
+#' imediatamente o fluxo.
+#'
+#' @param func Função sem argumentos a ser executada.
+#' @param attempts Número máximo de tentativas.
+#' @param wait Tempo de espera, em segundos, entre tentativas.
+#'
+#' @return O valor retornado por `func`.
+#'
+#' @details
+#' A função reexecuta apenas erros considerados recuperáveis.
+#' Se todas as tentativas falharem, o último erro capturado é propagado.
+#'
+#' @examples
+#' \dontrun{
+#' retry_manual(
+#'   func = function() yaml::read_yaml("config/paths.yaml"),
+#'   attempts = 3,
+#'   wait = 1
+#' )
+#' }
+#'
+#' @export
 retry_manual <- function(func, attempts, wait) {
 
   # --------------------------------------------------------
