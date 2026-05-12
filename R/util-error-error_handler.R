@@ -1,3 +1,27 @@
+#' Trata erros de forma centralizada no pipeline
+#'
+#' Registra informações diagnósticas sobre um erro ocorrido em uma etapa
+#' específica do pipeline e interrompe a execução com uma mensagem
+#' padronizada.
+#'
+#' Caso o logger falhe durante o registro, a função utiliza uma saída
+#' de fallback via `message()` para preservar o máximo possível do
+#' contexto original da falha.
+#'
+#' @param e Objeto de erro, normalmente uma condition.
+#' @param step Identificador da etapa em que a falha ocorreu.
+#'
+#' @return Esta função não retorna valor. Sempre interrompe a execução.
+#'
+#' @examples
+#' \dontrun{
+#' tryCatch(
+#'   expr = stop("Falha de leitura"),
+#'   error = function(e) handle_error(e, "LOAD_DATA")
+#' )
+#' }
+#'
+#' @export
 handle_error <- function(e, step = "DESCONHECIDO") {
 
   # --------------------------------------------------------
