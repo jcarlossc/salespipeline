@@ -27,24 +27,44 @@ safe_run <- function(expr, step) {
 
     tryCatch(
 
+      # --------------------------------------------------------
+      # Avalia a expressão no ambiente do chamador,
+      # preservando variáveis e contexto externo.
+      # --------------------------------------------------------
       eval(substitute(expr), parent.frame()),
 
       error = function(e) {
 
+        # --------------------------------------------------------
+        # Registra erros com identificação da etapa
+        # para facilitar rastreabilidade operacional.
+        # --------------------------------------------------------
         logger::log_error(
           glue::glue("Erro na etapa [{step}]: {e$message}")
         )
 
+        # --------------------------------------------------------
+        # Propaga o erro original para interromper
+        # o fluxo e permitir tratamento externo.
+        # --------------------------------------------------------
         stop(e)
       }
     ),
 
     warning = function(w) {
 
+      # --------------------------------------------------------
+      # Registra warnings sem interromper a execução,
+      # permitindo monitoramento do pipeline.
+      # --------------------------------------------------------
       logger::log_warn(
         glue::glue("Aviso na etapa [{step}]: {w$message}")
       )
 
+      # --------------------------------------------------------
+      # Suprime a exibição padrão do warning após
+      # o registro no logger, evitando duplicidade.
+      # --------------------------------------------------------
       invokeRestart("muffleWarning")
     }
   )
