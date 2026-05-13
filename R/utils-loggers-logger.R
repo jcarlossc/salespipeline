@@ -2,7 +2,35 @@ library(glue)
 library(yaml)
 library(logger)
 
-
+#' Configura o sistema centralizado de logging
+#'
+#' Inicializa o logger do pipeline utilizando configurações
+#' definidas em arquivo YAML.
+#'
+#' A função:
+#' - carrega configurações de logging;
+#' - cria diretórios automaticamente quando necessário;
+#' - configura nível de log, timezone e layout;
+#' - habilita saída em arquivo e console;
+#' - define comportamento append/overwrite;
+#' - registra logs de inicialização e falha.
+#'
+#' @return Invisivelmente `NULL`.
+#'
+#' @details
+#' O arquivo `logging.yaml` deve estar disponível em:
+#'
+#' `inst/config/logging.yaml`
+#'
+#' @examples
+#' \dontrun{
+#' setup_logger()
+#' }
+#'
+#' @importFrom glue glue
+#' @importFrom yaml read_yaml
+#' @importFrom logger log_info log_warn log_error
+#' @export
 setup_logger <- function() {
 
   tryCatch({
