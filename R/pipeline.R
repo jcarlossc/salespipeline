@@ -25,4 +25,8 @@ run_pipeline <- function() {
     logger::log_info("Encerrando conexão...")
     DBI::dbDisconnect(con)
   }, add = TRUE)
+
+  data_access <- access_data(con)
+
+  print(data_access)
 }
