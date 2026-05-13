@@ -46,20 +46,36 @@ library(glue)
 get_db_connection <- function() {
   tryCatch({
 
-    log_trace("Início da função get_db_connection()")
+    log_info("Iniciando conexão com banco de dados")
 
+    # -----------------------------------------------------
+    # Localização do arquivo de configuração
+    # -----------------------------------------------------
     config_yaml_db <- system.file(
       "config",
       "db.yaml",
       package = "salespipeline"
     )
 
+    log_debug(
+      glue("Arquivo de configuração localizado em: {config_yaml_db}")
+    )
+
     if (!nzchar(config_yaml_db)) {
+      log_error("Arquivo config/db.yaml não encontrado")
       stop("Arquivo config/db.yaml não encontrado")
     }
 
+    # -----------------------------------------------------
+    # Leitura do YAML
+    # -----------------------------------------------------
     db_config <- read_yaml_safe(config_yaml_db)$db
 
+    log_debug("Configuração do banco carregada com sucesso")
+
+    # -----------------------------------------------------
+    # Validação de campos obrigatórios
+    # -----------------------------------------------------
     required_fields <- c("host", "port", "name", "user", "password")
 
     missing <- setdiff(required_fields, names(db_config))
@@ -71,9 +87,24 @@ get_db_connection <- function() {
       stop("Configuração inválida do banco")
     }
 
+    log_debug("Validação de configuração concluída")
+
+    # -----------------------------------------------------
+    # Identificação do ambiente
+    # -----------------------------------------------------
     if (db_config$host %in% c("localhost", "127.0.0.1")) {
       log_info("Conectando em ambiente local (localhost)")
     }
+
+    # -----------------------------------------------------
+    # Tentativa de conexão
+    # -----------------------------------------------------
+
+    log_debug(
+      glue(
+        "Abrindo conexão MySQL em {db_config$host}:{db_config$port}"
+      )
+    )
 
     con <- DBI::dbConnect(
       RMySQL::MySQL(),
@@ -91,8 +122,6 @@ get_db_connection <- function() {
     # -----------------------------------------------------
     log_info("Conexão estabelecida com sucesso")
 
-    log_trace("Fim da função get_db_connection()")
-
     return(con)
 
   }, error = function(e) {
@@ -100,11 +129,11 @@ get_db_connection <- function() {
     # -----------------------------------------------------
     # Tratamento de erro
     # -----------------------------------------------------
-    log_error(glue("Erro na conexão: {e$message}"))
 
-    log_fatal("Falha crítica ao conectar ao banco")
-
-    stop(glue("Erro ao conectar ao banco: {e$message}"))
+    handle_error(
+      e,
+      step = "GET_DB_CONNECTION"
+    )
 
   })
 }
