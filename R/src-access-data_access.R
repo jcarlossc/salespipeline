@@ -4,6 +4,38 @@ library(logger)
 library(glue)
 library(dbplyr)
 
+#' Carrega e consolida tabelas do banco de dados
+#'
+#' Realiza a leitura das tabelas configuradas no arquivo
+#' `config/config.yaml`, executa joins utilizando `dplyr/dbplyr`
+#' e retorna os dados materializados em memória como tibble.
+#'
+#' A função utiliza execução lazy até a etapa de `collect()`,
+#' permitindo que os joins sejam processados diretamente
+#' no banco de dados.
+#'
+#' @param con Conexão ativa com banco de dados via DBI.
+#'
+#' @return Tibble contendo os dados consolidados.
+#'
+#' @details
+#' Fluxo executado:
+#' \itemize{
+#'   \item Leitura do arquivo de configuração
+#'   \item Identificação das tabelas
+#'   \item Criação de tabelas lazy com dbplyr
+#'   \item Execução de joins no banco
+#'   \item Materialização com collect()
+#'   \item Arredondamento de colunas numéricas
+#' }
+#'
+#' @examples
+#' \dontrun{
+#' con <- get_db_connection()
+#' df <- get_tables(con)
+#' }
+#'
+#' @export
 access_data <- function(con) {
 
   log_info("Iniciando carregamento das tabelas")
