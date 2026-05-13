@@ -60,8 +60,6 @@ get_db_connection <- function() {
 
     db_config <- read_yaml_safe(config_yaml_db)$db
 
-    #db_config <- read_yaml_safe("db.yaml")
-
     required_fields <- c("host", "port", "name", "user", "password")
 
     missing <- setdiff(required_fields, names(db_config))
