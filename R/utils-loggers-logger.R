@@ -33,7 +33,12 @@ library(logger)
 #' @export
 setup_logger <- function() {
 
+  log_info("Iniciando setup do logger")
+
   tryCatch({
+    # -----------------------------------------------------
+    # Leitura do arquivo de configuração
+    # -----------------------------------------------------
 
     config_logging <- system.file(
       "config",
@@ -41,20 +46,40 @@ setup_logger <- function() {
       package = "salespipeline"
     )
 
+    log_debug(glue("Arquivo de configuração localizado em: {config_logging}"))
+
     logging_config <- read_yaml_safe(config_logging)
+
+    log_debug("Arquivo logging.yaml carregado com sucesso")
 
     log_path <- logging_config$logs$file
 
+
     if (!dir.exists(dirname(log_path))) {
-      message("Diretório de logs não existe. Criando automaticamente.")
+      log_warn(
+        glue(
+          "Diretório de logs não encontrado: {dirname(log_path)}.
+          Criando automaticamente."
+        )
+      )
       dir.create(dirname(log_path), recursive = TRUE, showWarnings = FALSE)
     }
+
+    log_info("Diretório de logs criado com sucesso")
 
     level <- get_log_level(logging_config$logging$level)
 
     logger::log_threshold(level)
 
+    log_info(glue("Nível de log configurado para: {level}"))
+
     Sys.setenv(TZ = logging_config$format$timezone)
+
+    log_debug(
+      glue(
+        "Timezone configurado para: {logging_config$format$timezone}"
+      )
+    )
 
     logger::log_layout(
       logger::layout_glue_generator(
@@ -62,10 +87,12 @@ setup_logger <- function() {
       )
     )
 
+    log_debug("Layout de logs configurado")
+
     append_mode <- !isTRUE(logging_config$logging$overwrite)
 
     if (!append_mode) {
-      log_warn("Logs serão sobrescritos a cada execução (overwrite = TRUE)")
+      log_warn("Logs não serão sobrescritos a cada execução (overwrite = FALSE)")
     } else {
       log_trace("Modo append ativado (logs acumulativos)")
     }
@@ -75,18 +102,25 @@ setup_logger <- function() {
       append = append_mode
     )
 
+    log_debug(glue("Appender de arquivo configurado: {log_path}"))
+
     if (isTRUE(logging_config$logging$console)) {
       logger::log_appender(function(lines) {
         logger::appender_console(lines)
         logger::appender_file(log_path, append = append_mode)(lines)
       })
+      log_info("Logger configurado para console e arquivo")
 
     } else {
 
       logger::log_appender(
         logger::appender_file(log_path, append = append_mode)
       )
+      log_info("Logger configurado somente para arquivo")
     }
+
+    log_info("Término da função setup_logger")
+
   }, error = function(e) {
 
     # -----------------------------------------------------
