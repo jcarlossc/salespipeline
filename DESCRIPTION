@@ -21,7 +21,10 @@ Suggests:
 Config/testthat/edition: 3
 Imports: 
     DBI,
+    dbplyr,
+    dplyr,
     glue,
     logger,
     RMySQL,
+    tibble,
     yaml
