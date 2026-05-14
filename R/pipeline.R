@@ -1,10 +1,10 @@
-
+library(logger)
 
 run_pipeline <- function() {
 
   safe_run(setup_logger(), "SETUP_LOGGER")
 
-  log_info("Pipeline iniciado")
+  log_info("Início do Pipeline")
 
   config_yaml_config <- system.file(
     "config",
@@ -31,4 +31,6 @@ run_pipeline <- function() {
   access_metrics <- safe_run(access_metrics(data_access), "ACCESS-METRICS")
 
   print(access_metrics)
+
+  log_info("Término do Pipeline")
 }
