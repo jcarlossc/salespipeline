@@ -33,7 +33,7 @@ library(logger)
 #' @export
 setup_logger <- function() {
 
-  log_info("Iniciando setup do logger")
+  log_info("Iniciando setup_logger()")
 
   tryCatch({
     # -----------------------------------------------------
