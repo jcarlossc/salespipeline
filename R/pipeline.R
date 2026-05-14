@@ -26,7 +26,9 @@ run_pipeline <- function() {
     DBI::dbDisconnect(con)
   }, add = TRUE)
 
-  data_access <- access_data(con)
+  data_access <- safe_run(access_data(con), "DATA_ACCESS")
 
-  print(data_access)
+  access_metrics <- safe_run(access_metrics(data_access), "ACCESS-METRICS")
+
+  print(access_metrics)
 }
