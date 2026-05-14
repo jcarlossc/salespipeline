@@ -4,36 +4,44 @@ library(logger)
 library(glue)
 library(dbplyr)
 
-#' Carrega e consolida tabelas do banco de dados
+#' Carrega e consolida dados do banco
 #'
 #' Realiza a leitura das tabelas configuradas no arquivo
-#' `config/config.yaml`, executa joins utilizando `dplyr/dbplyr`
-#' e retorna os dados materializados em memória como tibble.
+#' `config/config.yaml`, executa joins entre as tabelas
+#' utilizando `dbplyr` e retorna os dados materializados
+#' em memória como tibble.
 #'
-#' A função utiliza execução lazy até a etapa de `collect()`,
-#' permitindo que os joins sejam processados diretamente
-#' no banco de dados.
+#' A função utiliza execução lazy até a etapa de
+#' `collect()`, permitindo que os joins sejam processados
+#' diretamente no banco de dados.
 #'
 #' @param con Conexão ativa com banco de dados via DBI.
 #'
-#' @return Tibble contendo os dados consolidados.
+#' @return
+#' Um objeto `tbl_df` contendo os dados consolidados.
 #'
 #' @details
 #' Fluxo executado:
 #' \itemize{
 #'   \item Leitura do arquivo de configuração
-#'   \item Identificação das tabelas
+#'   \item Identificação das tabelas configuradas
 #'   \item Criação de tabelas lazy com dbplyr
 #'   \item Execução de joins no banco
-#'   \item Materialização com collect()
+#'   \item Materialização dos dados com collect()
 #'   \item Arredondamento de colunas numéricas
 #' }
 #'
 #' @examples
 #' \dontrun{
 #' con <- get_db_connection()
-#' df <- get_tables(con)
+#'
+#' df <- access_data(con)
+#'
+#' head(df)
 #' }
+#'
+#' @seealso
+#' \code{\link{get_db_connection}}
 #'
 #' @export
 access_data <- function(con) {
@@ -77,59 +85,18 @@ access_data <- function(con) {
     sales_name <- database_config$tables$sales
     seller_name <- database_config$tables$seller
 
-    log_info(
-      glue(
-        "Tabelas identificadas: {product_name}, {sales_name}, {seller_name}"
-      )
-    )
-
-    # -----------------------------------------------------
-    # Criação de tabelas lazy
-    # -----------------------------------------------------
-
     product <- tbl(con, product_name)
     sales <- tbl(con, sales_name)
     seller <- tbl(con, seller_name)
 
-    log_debug("Objetos lazy carregados com sucesso")
-
-    # -----------------------------------------------------
-    # Construção da query
-    # -----------------------------------------------------
-
-    log_debug("Executando joins entre tabelas")
-
     result <- sales %>%
       inner_join(product, by = "produto_id") %>%
-      inner_join(seller, by = "vendedor_id")
-
-    log_debug("Query SQL construída com sucesso")
-
-    # -----------------------------------------------------
-    # Materialização dos dados
-    # -----------------------------------------------------
-
-    log_debug("Executando collect()")
-
-    result <- result %>%
+      inner_join(seller, by = "vendedor_id") %>%
       collect() %>%
       as_tibble() %>%
       mutate(across(where(is.numeric), ~ round(.x, 2)))
 
-    # -----------------------------------------------------
-    # Resultado final
-    # -----------------------------------------------------
-
-    log_info(
-      glue(
-        "Consulta finalizada com {nrow(result)} registros"
-      )
-    )
-
-    if (nrow(result) == 0) {
-
-      log_warn("A consulta retornou dataset vazio")
-    }
+    log_info(glue("Consulta finalizada com {nrow(result)} registros"))
 
     return(result)
 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/src-access-data_access.R
 \name{access_data}
 \alias{access_data}
-\title{Carrega e consolida tabelas do banco de dados}
+\title{Carrega e consolida dados do banco}
 \usage{
 access_data(con)
 }
@@ -10,32 +10,39 @@ access_data(con)
 \item{con}{Conexão ativa com banco de dados via DBI.}
 }
 \value{
-Tibble contendo os dados consolidados.
+Um objeto \code{tbl_df} contendo os dados consolidados.
 }
 \description{
 Realiza a leitura das tabelas configuradas no arquivo
-\code{config/config.yaml}, executa joins utilizando \code{dplyr/dbplyr}
-e retorna os dados materializados em memória como tibble.
+\code{config/config.yaml}, executa joins entre as tabelas
+utilizando \code{dbplyr} e retorna os dados materializados
+em memória como tibble.
 }
 \details{
-A função utiliza execução lazy até a etapa de \code{collect()},
-permitindo que os joins sejam processados diretamente
-no banco de dados.
+A função utiliza execução lazy até a etapa de
+\code{collect()}, permitindo que os joins sejam processados
+diretamente no banco de dados.
 
 Fluxo executado:
 \itemize{
 \item Leitura do arquivo de configuração
-\item Identificação das tabelas
+\item Identificação das tabelas configuradas
 \item Criação de tabelas lazy com dbplyr
 \item Execução de joins no banco
-\item Materialização com collect()
+\item Materialização dos dados com collect()
 \item Arredondamento de colunas numéricas
 }
 }
 \examples{
 \dontrun{
 con <- get_db_connection()
-df <- get_tables(con)
+
+df <- access_data(con)
+
+head(df)
 }
 
+}
+\seealso{
+\code{\link{get_db_connection}}
 }

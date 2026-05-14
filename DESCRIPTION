@@ -26,5 +26,6 @@ Imports:
     glue,
     logger,
     RMySQL,
+    RSQLite,
     tibble,
     yaml
