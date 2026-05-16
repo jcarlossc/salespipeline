@@ -1,0 +1,52 @@
+---
+title: ""
+author: ""
+date: ""
+output:
+  pdf_document:
+    toc: false
+    number_sections: true
+    latex_engine: xelatex
+fontsize: 12pt
+geometry: margin=2.5cm
+---
+
+\thispagestyle{empty}
+
+\begin{center}
+
+\vspace*{2cm}
+
+{\Large \textbf{RELATÓRIO EXECUTIVO DE VENDAS}}
+
+\vspace{0.5cm}
+
+{\large Carlos da Costa}
+
+\vspace{0.5cm}
+
+{\large \today}
+
+\vspace{2cm}
+
+\includegraphics[width=0.7\textwidth]{vendas.jpg}
+
+\vfill
+
+Recife - PE
+
+\end{center}
+
+\newpage
+
+\tableofcontents
+
+\newpage
+
+\thispagestyle{empty}
+\vspace*{5cm}
+\begin{center}
+
+\end{center}
+
+\newpage

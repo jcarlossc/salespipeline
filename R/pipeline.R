@@ -139,11 +139,6 @@ run_pipeline <- function() {
 
     log_info("Métricas calculadas com sucesso")
 
-    # --------------------------------------------------------------------------
-    # Exibição do resultado
-    # --------------------------------------------------------------------------
-    print(access_metrics_result)
-
     log_info("Pipeline executado com sucesso")
 
     invisible(access_metrics_result)

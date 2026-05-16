@@ -1,5 +1,6 @@
 library(glue)
 library(yaml)
+library(here)
 library(logger)
 
 #' Configura o sistema centralizado de logging
@@ -52,7 +53,9 @@ setup_logger <- function() {
 
     log_debug("Arquivo logging.yaml carregado com sucesso")
 
-    log_path <- logging_config$logs$file
+    log_path <- here::here(
+      logging_config$logs$file
+    )
 
 
     if (!dir.exists(dirname(log_path))) {
