@@ -99,3 +99,59 @@ salespipeline/
       │     └── test-utils-loggers-logger.R
       └── testthat.R
 ```
+
+---
+
+## Diferenciais do Projeto
+* Arquitetura desacoplada (pipeline vs relatório vs dashboard)
+* Implementação de retentativas (retry) 
+* Tratamento de error
+* Automação completa da análise
+* Código organizado e escalável
+* Foco em insight de negócio, não apenas código
+
+## Modo de Utilização
+
+### 1. Execute o XAMPP
+* Caso não o tenha, baixe-o: <a href="https://www.apachefriends.org/pt_br/download.html">https://www.apachefriends.org/pt_br/download.html</a>
+* Instale-o normalmente
+* Execute o Painel de Controle
+* Acione o Apache e o MySQL/MariaDB
+* Ao lado do botão start/stop do MySQL/MariaDB, clique em Admin. Isso irá abrir a interface do MySQL/MariaDB no navegador
+* Clique na aba importar e em escolher arquivo: o script está na raiz do projeto: ```script_database/loja_informatica.sql```, após isso, clique em importar no final da página
+* O banco de Dados está com usuário ```root``` e senha vazia. O arquivo de configuração está em: ```config/db.yaml```
+
+### 2. Clone o repositório e acesse o diretório
+```
+git clone https://github.com/jcarlossc/salespipeline.git
+cd salespipeline
+```
+### 3. Restaure as dependências:
+```
+renv::restore()
+```
+### 4. Gerar relatório PDF:
+* Acesse o arquivo do relatótio: ```salespipeline/reports/report.Rmd``` e clique no botão ```Knit```
+* Ou, acesse o arquivo do relatótio: ```salespipeline/reports/report.Rmd``` e use o atalho ```Ctrl + Shift + K```
+* Ou, simplesmente, no console, digite: ```rmarkdown::render("reports/report_sales_pipeline.Rmd")```
+* Qualquer um desses procedimentos vai gerar um relatório em PDF
+
+### 5. Gerar DashBoard interativo:
+* Acesse o arquivo do DashBoard: ```salespipeline/app/app.R``` e clique no botão ```Run App```
+* Ou, no console, digite: ```shiny::runApp("app")```
+* Após abertura de uma janela com o DashBoard, existe um botão na parte superior que, caso queira, o DashBoard poderá ser visualizado também no navegador. 
+
+## Licença
+Este projeto está licenciado sob MIT License.
+
+## Contato
+* Recife, PE - Brasil
+* Telefone: +55 81 99712 9140
+* Telegram: @jcarlossc
+* Blogger linguagem R: https://informaticus77-r.blogspot.com/
+* Blogger linguagem Python: https://informaticus77-python.blogspot.com/
+* Email: jcarlossc1977@gmail.com
+* LinkedIn: https://www.linkedin.com/in/carlos-da-costa-669252149/
+* GitHub: https://github.com/jcarlossc
+* Kaggle: https://www.kaggle.com/jcarlossc/
+* Twitter/X: https://x.com/jcarlossc1977
