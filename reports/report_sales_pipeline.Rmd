@@ -50,3 +50,399 @@ Recife - PE
 \end{center}
 
 \newpage
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  warning = FALSE,
+  message = FALSE
+)  
+
+# --------------------------------------------------------
+# Pacotes utilizados
+# --------------------------------------------------------
+library(dplyr)
+library(ggplot2)
+library(scales)
+library(tibble)
+library(knitr)
+library(kableExtra)
+library(forcats)
+library(logger)
+
+devtools::load_all()
+
+metrics <- run_pipeline()
+
+kpis <- metrics$kpis
+by_seller <- metrics$by_seller
+by_product <- metrics$by_product
+```
+
+#  KPIs Gerais do Pipeline de Vendas
+
+```{r}
+# ------------------------------------------------------------------
+# Tabela de KPIs
+# ------------------------------------------------------------------
+kpi_table <- tibble(
+  Indicador = c(
+    "Total de Vendas",
+    "Itens Vendidos",
+    "Faturamento Total",
+    "Custo Total",
+    "Lucro Total",
+    "Ticket Médio",
+    "Quantidade de Produtos",
+    "Quantidade de Vendedores"
+  ),
+  Valor = c(
+    scales::number(kpis$total_vendas, big.mark = ".", decimal.mark = ","),
+    
+    scales::number(
+      kpis$total_itens_vendidos,
+      big.mark = ".",
+      decimal.mark = ","
+    ),
+    
+    scales::label_currency(
+      prefix = "R$ ",
+      big.mark = ".",
+      decimal.mark = ",",
+      accuracy = 0.01
+    )(kpis$faturamento_total),
+    
+    scales::label_currency(
+      prefix = "R$ ",
+      big.mark = ".",
+      decimal.mark = ",",
+      accuracy = 0.01
+    )(kpis$custo_total),
+    
+    scales::label_currency(
+      prefix = "R$ ",
+      big.mark = ".",
+      decimal.mark = ",",
+      accuracy = 0.01
+    )(kpis$lucro_total),
+    
+    scales::label_currency(
+      prefix = "R$ ",
+      big.mark = ".",
+      decimal.mark = ",",
+      accuracy = 0.01
+    )(kpis$ticket_medio),
+    
+    scales::number(
+      kpis$qtd_produtos,
+      big.mark = ".",
+      decimal.mark = ","
+    ),
+    
+    scales::number(
+      kpis$qtd_vendedores,
+      big.mark = ".",
+      decimal.mark = ","
+    )
+  )
+)
+
+# ------------------------------------------------------------------
+# Exibição da tabela formatada
+# ------------------------------------------------------------------
+kable(
+  kpi_table,
+  caption = "",
+  align = c("l", "c"),
+  booktabs = TRUE
+) %>%
+  kable_styling(
+    bootstrap_options = c(
+      "striped",
+      "hover",
+      "condensed",
+      "responsive"
+    ),
+    full_width = TRUE,
+    position = "center",
+    font_size = 14
+  ) %>%
+  row_spec(
+    0,
+    bold = TRUE,
+    color = "white",
+    background = "#1F4E78"
+  ) %>%
+  row_spec(
+    1:nrow(kpi_table),
+    background = c(
+      "#F8F9FA",
+      "#EAF2F8"
+    )
+  ) %>%
+  column_spec(
+    1,
+    width = "20em",
+    bold = TRUE,
+    color = "#1F1F1F"
+  ) %>%
+  column_spec(
+    2,
+    width = "15em",
+    color = "#0B5345",
+    bold = TRUE
+  )
+```
+
+## Interpretação dos KPIs
+
+Os indicadores apresentados fornecem uma visão estratégica do negócio.
+
+### Principais pontos analisados:
+
+* O faturamento total representa a receita bruta obtida.
+* O custo total representa os gastos associados às vendas.
+* O lucro total demonstra o resultado financeiro líquido.
+* O ticket médio ajuda a identificar o valor médio das transações.
+* A quantidade de vendedores e produtos indica a abrangência operacional.
+
+\newpage
+
+# Top 10 Vendedores por Faturamento
+
+```{r}
+top_sellers <- by_seller %>%
+  slice_max(
+    faturamento,
+    n = 10
+  )
+
+ggplot(
+  top_sellers,
+  aes(
+    x = fct_reorder(vendedor, faturamento),
+    y = faturamento,
+    fill = faturamento
+  )
+) +
+  
+  geom_col(
+    width = 0.7,
+    color = "black"
+  ) +
+  
+  coord_flip() +
+  
+  scale_fill_gradient(
+    low = "#A7D3F4",
+    high = "#0B5CAD"
+  ) +
+  
+  scale_y_continuous(
+    labels = scales::label_dollar(
+      prefix = "R$ ",
+      big.mark = ".",
+      decimal.mark = ","
+    )
+  ) +
+  
+  labs(
+    title = "",
+    subtitle = "Ranking dos vendedores com maior volume financeiro",
+    x = "Vendedor",
+    y = "Faturamento"
+  ) +
+  
+  theme_minimal(base_size = 13) +
+  
+  theme(
+    legend.position = "none",
+    
+    plot.title = element_text(
+      face = "bold",
+      size = 16
+    ),
+    
+    plot.subtitle = element_text(
+      color = "gray40",
+      size = 11
+    ),
+    
+    axis.text.y = element_text(
+      face = "bold"
+    )
+  )
+```
+
+## Análise do Desempenho dos Vendedores
+
+O gráfico anterior permite identificar:
+
+* Vendedores com maior capacidade de geração de receita
+* Diferenças de desempenho entre equipes
+* Possíveis referências para benchmarking interno
+* Oportunidades de treinamento comercial
+
+Também é possível utilizar essas informações para:
+
+* Programas de incentivo
+* Avaliação de metas
+* Planejamento estratégico de vendas
+
+\newpage
+
+# Lucro Gerado por Vendedor
+
+```{r}
+ggplot(
+  top_sellers,
+  aes(
+    x = forcats::fct_reorder(vendedor, lucro),
+    y = lucro,
+    fill = lucro
+  )
+) +
+  
+  geom_col(
+    width = 0.7,
+    color = "black"
+  ) +
+  
+  coord_flip() +
+  
+  scale_fill_gradient(
+    low = "#A8E6A3",
+    high = "#0B8F3A"
+  ) +
+  
+  scale_y_continuous(
+    labels = scales::label_dollar(
+      prefix = "R$ ",
+      big.mark = ".",
+      decimal.mark = ","
+    )
+  ) +
+  
+  labs(
+    title = "",
+    subtitle = "Desempenho financeiro individual da equipe comercial",
+    x = "Vendedor",
+    y = "Lucro"
+  ) +
+  
+  theme_minimal(base_size = 13) +
+  
+  theme(
+    legend.position = "none",
+    
+    plot.title = element_text(
+      face = "bold",
+      size = 16
+    ),
+    
+    plot.subtitle = element_text(
+      size = 11,
+      color = "gray40"
+    ),
+    
+    axis.text.y = element_text(
+      face = "bold"
+    ),
+    
+    panel.grid.minor = element_blank()
+  )
+```
+
+## Interpretação Financeira
+
+Nem sempre os vendedores com maior faturamento são os mais lucrativos.
+
+Essa análise permite identificar:
+
+* Eficiência comercial
+* Qualidade das vendas
+* Impacto da margem de lucro
+* Potenciais problemas de precificação
+
+\newpage
+
+# Comparativo: Faturamento vs Lucro
+
+```{r}
+comparison_df <- tibble(
+  Indicador = c("Faturamento", "Lucro"),
+  Valor = c(
+    kpis$faturamento_total,
+    kpis$lucro_total
+  )
+)
+
+ggplot(
+  comparison_df,
+  aes(
+    x = Indicador,
+    y = Valor,
+    fill = Indicador
+  )
+) +
+  geom_col(
+    width = 0.6,
+    color = "black"
+  ) +
+  
+  scale_fill_manual(
+    values = c(
+      "Faturamento" = "#1F77B4",
+      "Lucro" = "#2CA02C"
+    )
+  ) +
+  
+  scale_y_continuous(
+    labels = scales::label_dollar(
+      prefix = "R$ ",
+      big.mark = ".",
+      decimal.mark = ","
+    )
+  ) +
+  
+  labs(
+    title = "",
+    subtitle = "Visão financeira consolidada",
+    x = "",
+    y = "Valor"
+  ) +
+  
+  theme_minimal(base_size = 14) +
+  
+  theme(
+    legend.position = "none",
+    
+    plot.title = element_text(
+      face = "bold",
+      size = 16
+    ),
+    
+    plot.subtitle = element_text(
+      size = 12,
+      color = "gray40"
+    ),
+    
+    axis.text.x = element_text(
+      face = "bold",
+      size = 12
+    )
+  )
+```
+
+
+
+
+
+
+\newpage
+
+```{r}
+kpis
+by_seller
+by_product
+```
