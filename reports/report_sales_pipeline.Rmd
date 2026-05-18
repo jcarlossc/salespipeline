@@ -77,7 +77,23 @@ metrics <- run_pipeline()
 kpis <- metrics$kpis
 by_seller <- metrics$by_seller
 by_product <- metrics$by_product
+
+log_info("Início da geração do Relatório")
 ```
+
+# Introdução
+
+A presente análise tem como objetivo explorar o desempenho de vendas a partir de três dimensões principais: visão geral do negócio, performance por produto e desempenho por vendedor.
+
+No nível executivo, observa-se um total de 600 vendas, representando 3.183 itens comercializados, com faturamento de aproximadamente R$ 1,42 milhão e lucro de R$ 471 mil, resultando em um ticket médio de R$ 2.374. Esses indicadores fornecem uma visão consolidada da operação e servem como base para análises mais detalhadas.
+
+A análise por produto busca identificar quais itens contribuem de forma mais significativa para o faturamento e o lucro, permitindo avaliar tanto o volume de vendas quanto a eficiência financeira de cada categoria.
+
+Por sua vez, a análise por vendedor permite compreender a distribuição de performance entre a equipe comercial, destacando padrões de produtividade e possíveis oportunidades de melhoria ou replicação de estratégias bem-sucedidas.
+
+Este estudo tem como foco não apenas descrever os dados, mas gerar insights acionáveis, apoiando a tomada de decisão e a otimização dos resultados do negócio.
+
+\newpage
 
 #  KPIs Gerais do Pipeline de Vendas
 
@@ -366,6 +382,169 @@ Essa análise permite identificar:
 
 \newpage
 
+# Top 10 Produtos por Faturamento
+
+```{r}
+top_products <- by_product %>%
+  slice_max(
+    faturamento,
+    n = 10
+  )
+
+ggplot(
+  top_products,
+  aes(
+    x = forcats::fct_reorder(produto, faturamento),
+    y = faturamento,
+    fill = faturamento
+  )
+) +
+  
+  geom_col(
+    width = 0.7,
+    color = "black"
+  ) +
+  
+  coord_flip() +
+  
+  scale_fill_gradient(
+    low = "#FFD27F",
+    high = "#E67E22"
+  ) +
+  
+  scale_y_continuous(
+    labels = scales::label_dollar(
+      prefix = "R$ ",
+      big.mark = ".",
+      decimal.mark = ","
+    )
+  ) +
+  
+  labs(
+    title = "Top 10 Produtos por Faturamento",
+    subtitle = "Produtos com maior geração de receita",
+    x = "Produto",
+    y = "Faturamento"
+  ) +
+  
+  theme_minimal(base_size = 13) +
+  
+  theme(
+    legend.position = "none",
+    
+    plot.title = element_text(
+      face = "bold",
+      size = 16
+    ),
+    
+    plot.subtitle = element_text(
+      size = 11,
+      color = "gray40"
+    ),
+    
+    axis.text.y = element_text(
+      face = "bold",
+      size = 10
+    ),
+    
+    panel.grid.minor = element_blank()
+  )
+```
+
+## Interpretação dos Produtos
+
+Os produtos com maior faturamento representam os itens com maior
+impacto financeiro no negócio.
+
+Essa análise auxilia:
+
+* Gestão de estoque
+* Definição de campanhas
+* Estratégias de marketing
+* Priorização de produtos
+
+\newpage
+
+# Lucro por Produto
+
+```{r}
+ggplot(
+  top_products,
+  aes(
+    x = forcats::fct_reorder(produto, lucro),
+    y = lucro,
+    fill = lucro
+  )
+) +
+  
+  geom_col(
+    width = 0.7,
+    color = "black"
+  ) +
+  
+  coord_flip() +
+  
+  scale_fill_gradient(
+    low = "#CDB4FF",
+    high = "#6A0DAD"
+  ) +
+  
+  scale_y_continuous(
+    labels = scales::label_dollar(
+      prefix = "R$ ",
+      big.mark = ".",
+      decimal.mark = ","
+    )
+  ) +
+  
+  labs(
+    title = "",
+    subtitle = "Produtos com maior contribuição para o lucro",
+    x = "Produto",
+    y = "Lucro"
+  ) +
+  
+  theme_minimal(base_size = 13) +
+  
+  theme(
+    legend.position = "none",
+    
+    plot.title = element_text(
+      face = "bold",
+      size = 16
+    ),
+    
+    plot.subtitle = element_text(
+      size = 11,
+      color = "gray40"
+    ),
+    
+    axis.text.y = element_text(
+      face = "bold",
+      size = 10
+    ),
+    
+    panel.grid.minor = element_blank()
+  )
+```
+
+## Interpretação da Margem dos Produtos
+
+Produtos altamente lucrativos podem representar oportunidades de:
+
+* Expansão comercial
+* Investimento em marketing
+* Negociação com fornecedores
+* Estratégias de fidelização
+
+Produtos com baixo lucro podem exigir:
+
+* Revisão de preços
+* Redução de custos
+* Reavaliação da estratégia comercial
+
+\newpage
+
 # Comparativo: Faturamento vs Lucro
 
 ```{r}
@@ -434,15 +613,39 @@ ggplot(
   )
 ```
 
+## Interpretação Financeira Geral
 
+A diferença entre faturamento e lucro representa os custos envolvidos
+na operação.
 
+Essa visualização ajuda a compreender:
 
-
+* Eficiência financeira
+* Sustentabilidade operacional
+* Rentabilidade do negócio
+* Impacto dos custos sobre a receita
 
 \newpage
 
+# Conclusão
+
+A análise evidencia um cenário de vendas consistente, com destaque para produtos como Impressora e Monitor, que lideram o faturamento, indicando forte aceitação no mercado.
+
+Além disso, produtos como HD Externo e Cadeira Gamer apresentam excelente contribuição para o lucro, sugerindo maior margem e potencial estratégico para campanhas direcionadas.
+
+Observa-se também que itens como Webcam e Headset possuem alto volume de vendas, porém com menor impacto proporcional no faturamento, o que pode indicar oportunidades de revisão de preços ou estratégias de upsell.
+
+No desempenho individual, vendedores como Marcos Silva e Fernanda Rocha se destacam em faturamento, podendo servir como referência para boas práticas comerciais dentro da equipe.
+
+## Recomendações estratégicas:
+
+Priorizar investimentos em produtos com maior margem de lucro
+Desenvolver campanhas para itens com baixo desempenho
+Replicar estratégias dos vendedores com melhor performance
+Avaliar oportunidades de aumento de ticket médio
+
+Em síntese, os dados indicam um negócio saudável, com oportunidades claras de otimização de portfólio, melhoria de performance comercial e maximização de resultados financeiros.
+
 ```{r}
-kpis
-by_seller
-by_product
+log_info("Término da geração do Relatório")
 ```
