@@ -72,8 +72,8 @@ salespipeline/
 ├── renv.lock
 ├── reports/
 │       ├── vendas.jpg
-│       ├── report.pdf
-│       └── report.Rmd
+│       ├── report_sales_pipeline.pdf
+│       └── report_sales_pipeline.Rmd
 ├── R/
 │   ├── pipeline.R
 │   ├── src-access-data_access.R
@@ -102,13 +102,67 @@ salespipeline/
 
 ---
 
+# Stack Tecnológica
+
+| Tecnologia | Finalidade |
+|---|---|
+| R | Linguagem principal |
+| dplyr | Manipulação de dados |
+| ggplot2 | Visualização |
+| logger | Logging |
+| rmarkdown | Relatórios |
+| testthat | Testes |
+| yaml | Configuração |
+| glue | Mensagens dinâmicas |
+| devtools | Desenvolvimento |
+| roxygen2 | Documentação |
+| testthat | Testes unitários |
+| RMySQL | Driver MySQL |
+| shiny | DashBoard |
+| apache | Servidor |
+| MariaDB | Banco de Dados |
+
+---
+
+## Observabilidade
+
+O projeto possui logging estruturado com rastreamento completo da execução.
+
+### Exemplo de log
+```
+[2026-05-18 22:23:35.180915] INFO - Início do Pipeline
+[2026-05-18 22:23:35.20733] DEBUG - Lendo arquivo config.yaml
+[2026-05-18 22:23:35.272283] DEBUG - Configurações carregadas: retries = 3 | timeout = 5
+[2026-05-18 22:23:35.28029] INFO - Realizando conexão com banco de dados
+[2026-05-18 22:23:35.291884] INFO - Iniciando conexão com banco de dados
+[2026-05-18 22:23:35.32901] DEBUG - Arquivo de configuração localizado em: C:/workspace/r/salespipeline/inst/config/db.yaml
+[2026-05-18 22:23:35.375257] DEBUG - Configuração do banco carregada com sucesso
+[2026-05-18 22:23:35.393164] DEBUG - Validação de configuração concluída
+[2026-05-18 22:23:35.407017] INFO - Conectando em ambiente local (localhost)
+[2026-05-18 22:23:36.096705] DEBUG - Abrindo conexão MySQL em localhost:3306
+```
+
+---
+
 ## Diferenciais do Projeto
+
 * Arquitetura desacoplada (pipeline vs relatório vs dashboard)
 * Implementação de retentativas (retry) 
 * Tratamento de error
 * Automação completa da análise
 * Código organizado e escalável
 * Foco em insight de negócio, não apenas código
+
+---
+
+## Testes Automatizados
+
+- `testthat`
+- Cobertura de regras de negócio
+- Validações estruturais
+- Testes unitários
+
+---
 
 ## Modo de Utilização
 
@@ -141,10 +195,26 @@ renv::restore()
 * Ou, no console, digite: ```shiny::runApp("app")```
 * Após abertura de uma janela com o DashBoard, existe um botão na parte superior que, caso queira, o DashBoard poderá ser visualizado também no navegador. 
 
+---
+
 ## Licença
 Este projeto está licenciado sob MIT License.
 
+---
+
+## Desenvolvedor focado em:
+
+- Data Engineering
+- Analytics
+- R Programming
+- Python Programming
+- Automação de processos
+- Engenharia de Software
+
+---
+
 ## Contato
+* Autor: Carlos da Costa
 * Recife, PE - Brasil
 * Telefone: +55 81 99712 9140
 * Telegram: @jcarlossc
