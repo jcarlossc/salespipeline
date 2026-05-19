@@ -31,8 +31,9 @@ transformando dados brutos em métricas estratégicas, relatórios executivos e 
 
 ---
 
-## Arquitetura do Projeto
+## Estrutura do Projeto
 
+⚠️Observação: os projetos em linguagem R se diferenciam de outras linguagens no que diz respeito à estrutura de diretórios. Em linguagens como Python ou Php, por exemplo, modulariza-se o sistema, geralmente, por intermédio de diretórios, por exemplo: utils, src, db, logger, helpers, entre outros. No R, entretanto, é mais indicado manter as funções principais em um único diretório chamado 'R'. Este estilo de construção é chamado 'package', ou seja, é construído como um pacote da linguagem R. Com isso, além de muitos outros benefícios, a aplicação pode ser documentada (documentação dinâmica com roxygen2) e testada (testes unitários com testthat) com maior consistência. 
 ```
 salespipeline/
 |
@@ -102,6 +103,45 @@ salespipeline/
 
 ---
 
+## Arquitetura do Projeto
+
+```
+          ┌──────────────────┐
+          │   Banco de Dados │
+          └────────┬─────────┘
+                   │
+                   ▼
+          ┌──────────────────┐
+          │   Access Layer   │
+          │  access_data()   │
+          └────────┬─────────┘
+                   │
+                   ▼
+          ┌──────────────────┐
+          │ Business Metrics │
+          │access_metrics()  │
+          └────────┬─────────┘
+                   │
+                   ▼
+          ┌──────────────────┐
+          │   Reporting      │
+          │ RMarkdown / PDF  │
+          └────────┬─────────┘
+                   │
+                   ▼
+          ┌──────────────────┐
+          │    DashBoard     │
+          │  Shiny / html    │
+          └────────┬─────────┘
+                   │
+                   ▼
+          ┌──────────────────┐
+          │ Logs + Monitoring│
+          └──────────────────┘
+```
+
+---
+
 # Stack Tecnológica
 
 | Tecnologia | Finalidade |
@@ -152,6 +192,13 @@ O projeto possui logging estruturado com rastreamento completo da execução.
 * Automação completa da análise
 * Código organizado e escalável
 * Foco em insight de negócio, não apenas código
+
+---
+
+## Documentação
+
+- `roxygen2`
+- Documentação Dinâmica
 
 ---
 
