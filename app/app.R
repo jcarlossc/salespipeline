@@ -7,21 +7,25 @@ library(shinydashboard)
 library(logger)
 
 # --------------------------------------------------------
-# Importe do arquivo main
+# Carregamento das funções
 # --------------------------------------------------------
 devtools::load_all()
 
-# --------------------------------------------------------
-# Retorno do arquivo main
-# --------------------------------------------------------
+# ---------------------------------------------------------------
+# Executa a função de pipeline
+# ---------------------------------------------------------------
 metrics <- run_pipeline()
 
+# ---------------------------------------------------------------
+# Métricas principais, por vendedor e por produtos
+# ---------------------------------------------------------------
 # Métricas de vendas
 sales <- metrics$kpis
 # Métricas de produtos
 products <- metrics$by_product
 # Métricas dos vendedores
 seller <- metrics$by_seller
+
 log_info("Início da geração do DashBoard")
 
 # --------------------------------------------------------
