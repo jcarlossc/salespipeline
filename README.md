@@ -213,6 +213,21 @@ O projeto possui logging estruturado com rastreamento completo da execução.
 
 ## Modo de Utilização
 
+⚠️Observação: aplicações em R, ou em outras linguagens, que utilizam banco de dados e APIs, nunca é recomendado deixar senhas diretamente no código (hardcoded password). Neste projeto, por motivos didáticos (para facilitar a reprodução), o arquivo de senha do Banco de Dados está no arquivo YAML, mas essa abordagem é extremamente desaprovada. Para maior segurança, segue uma pequena lista de recursos de segurança em linguagem R:
+* ✅ usar .Renviron
+* ✅ usar {keyring}
+* ✅ usar HTTPS em APIs
+* ✅ usar tokens temporários
+* ✅ usar .gitignore
+* ✅ rotacionar senhas<br>
+
+Evite:
+* ❌ senha hardcoded
+* ❌ subir credenciais no GitHub
+* ❌ compartilhar .Renviron
+* ❌ usar senha fraca
+* ❌ expor logs com credenciais
+
 ### 1. Execute o XAMPP
 * Caso não o tenha, baixe-o: <a href="https://www.apachefriends.org/pt_br/download.html">https://www.apachefriends.org/pt_br/download.html</a>
 * Instale-o normalmente
