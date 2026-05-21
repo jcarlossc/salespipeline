@@ -70,10 +70,19 @@ library(kableExtra)
 library(forcats)
 library(logger)
 
+# ---------------------------------------------------------------
+# Carregamento das funções
+# ---------------------------------------------------------------
 devtools::load_all()
 
+# ---------------------------------------------------------------
+# Executa a função de pipeline
+# ---------------------------------------------------------------
 metrics <- run_pipeline()
 
+# ---------------------------------------------------------------
+# Métricas principais, por vendedor e por produtos
+# ---------------------------------------------------------------
 kpis <- metrics$kpis
 by_seller <- metrics$by_seller
 by_product <- metrics$by_product
@@ -224,6 +233,119 @@ Os indicadores apresentados fornecem uma visão estratégica do negócio.
 
 \newpage
 
+# Comparativo: Faturamento vs Lucro
+
+```{r}
+comparison_df <- tibble(
+  Indicador = c(
+    "Faturamento",
+    "Lucro",
+    "Custo",
+    "Ticket Médio"
+  ),
+  
+  Valor = c(
+    kpis$faturamento_total,
+    kpis$lucro_total,
+    kpis$custo_total,
+    kpis$ticket_medio
+  )
+)
+
+ggplot(
+  comparison_df,
+  aes(
+    x = Indicador,
+    y = Valor,
+    fill = Indicador
+  )
+) +
+  
+  geom_col(
+    width = 0.6,
+    color = "black"
+  ) +
+  
+  # Valores acima das barras
+  geom_text(
+    aes(
+      label = scales::dollar(
+        Valor,
+        prefix = "R$ ",
+        big.mark = ".",
+        decimal.mark = ",",
+        accuracy = 0.01
+      )
+    ),
+    
+    vjust = -0.5,
+    size = 4.5,
+    fontface = "bold"
+  ) +
+  
+  scale_fill_manual(
+    values = c(
+      "Faturamento"  = "#1F77B4",
+      "Lucro"        = "#2CA02C",
+      "Custo"        = "#D62728",
+      "Ticket Médio" = "#FF7F0E"
+    )
+  ) +
+  
+  scale_y_continuous(
+    labels = scales::label_dollar(
+      prefix = "R$ ",
+      big.mark = ".",
+      decimal.mark = ",",
+      accuracy = 0.01
+    ),
+    
+    expand = expansion(mult = c(0, 0.15))
+  ) +
+  
+  labs(
+    title = "Indicadores Financeiros",
+    subtitle = "Visão financeira consolidada",
+    x = "",
+    y = "Valor"
+  ) +
+  
+  theme_minimal(base_size = 14) +
+  
+  theme(
+    legend.position = "none",
+    
+    plot.title = element_text(
+      face = "bold",
+      size = 16
+    ),
+    
+    plot.subtitle = element_text(
+      size = 12,
+      color = "gray40"
+    ),
+    
+    axis.text.x = element_text(
+      face = "bold",
+      size = 12
+    )
+  )
+```
+
+## Interpretação Financeira Geral
+
+A diferença entre faturamento e lucro representa os custos envolvidos
+na operação.
+
+Essa visualização ajuda a compreender:
+
+* Eficiência financeira
+* Sustentabilidade operacional
+* Rentabilidade do negócio
+* Impacto dos custos sobre a receita
+
+\newpage
+
 # Top 10 Vendedores por Faturamento
 
 ```{r}
@@ -231,6 +353,20 @@ top_sellers <- by_seller %>%
   slice_max(
     faturamento,
     n = 10
+  ) %>%
+  
+  mutate(
+    label_pos = ifelse(
+      faturamento > max(faturamento) * 0.15,
+      faturamento * 0.98,   # dentro da barra
+      faturamento * 1.03    # fora da barra
+    ),
+    
+    hjust_pos = ifelse(
+      faturamento > max(faturamento) * 0.15,
+      1.1,   # alinhamento interno
+      0      # alinhamento externo
+    )
   )
 
 ggplot(
@@ -247,6 +383,27 @@ ggplot(
     color = "black"
   ) +
   
+  # Valores dentro ou fora da barra
+  geom_text(
+    aes(
+      y = label_pos,
+      
+      label = scales::dollar(
+        faturamento,
+        prefix = "R$ ",
+        big.mark = ".",
+        decimal.mark = ",",
+        accuracy = 0.01
+      ),
+      
+      hjust = hjust_pos
+    ),
+    
+    size = 4,
+    fontface = "bold",
+    color = "black"
+  ) +
+  
   coord_flip() +
   
   scale_fill_gradient(
@@ -258,12 +415,15 @@ ggplot(
     labels = scales::label_dollar(
       prefix = "R$ ",
       big.mark = ".",
-      decimal.mark = ","
-    )
+      decimal.mark = ",",
+      accuracy = 0.01
+    ),
+    
+    expand = expansion(mult = c(0, 0.12))
   ) +
   
   labs(
-    title = "",
+    title = "Top 10 Vendedores",
     subtitle = "Ranking dos vendedores com maior volume financeiro",
     x = "Vendedor",
     y = "Faturamento"
@@ -310,8 +470,24 @@ Também é possível utilizar essas informações para:
 # Lucro Gerado por Vendedor
 
 ```{r}
+top_sellers_lucro <- top_sellers %>%
+  
+  mutate(
+    label_pos = ifelse(
+      lucro > max(lucro) * 0.15,
+      lucro * 0.98,   # dentro da barra
+      lucro * 1.03    # fora da barra
+    ),
+    
+    hjust_pos = ifelse(
+      lucro > max(lucro) * 0.15,
+      1.1,   # texto interno
+      0      # texto externo
+    )
+  )
+
 ggplot(
-  top_sellers,
+  top_sellers_lucro,
   aes(
     x = forcats::fct_reorder(vendedor, lucro),
     y = lucro,
@@ -321,6 +497,27 @@ ggplot(
   
   geom_col(
     width = 0.7,
+    color = "black"
+  ) +
+  
+  # Valores dentro/fora das barras
+  geom_text(
+    aes(
+      y = label_pos,
+      
+      label = scales::dollar(
+        lucro,
+        prefix = "R$ ",
+        big.mark = ".",
+        decimal.mark = ",",
+        accuracy = 0.01
+      ),
+      
+      hjust = hjust_pos
+    ),
+    
+    size = 4,
+    fontface = "bold",
     color = "black"
   ) +
   
@@ -335,12 +532,15 @@ ggplot(
     labels = scales::label_dollar(
       prefix = "R$ ",
       big.mark = ".",
-      decimal.mark = ","
-    )
+      decimal.mark = ",",
+      accuracy = 0.01
+    ),
+    
+    expand = expansion(mult = c(0, 0.12))
   ) +
   
   labs(
-    title = "",
+    title = "Lucro por Vendedor",
     subtitle = "Desempenho financeiro individual da equipe comercial",
     x = "Vendedor",
     y = "Lucro"
@@ -389,6 +589,20 @@ top_products <- by_product %>%
   slice_max(
     faturamento,
     n = 10
+  ) %>%
+  
+  mutate(
+    label_pos = ifelse(
+      faturamento > max(faturamento) * 0.15,
+      faturamento * 0.98,   # dentro da barra
+      faturamento * 1.03    # fora da barra
+    ),
+    
+    hjust_pos = ifelse(
+      faturamento > max(faturamento) * 0.15,
+      1.1,   # alinhamento interno
+      0      # alinhamento externo
+    )
   )
 
 ggplot(
@@ -405,6 +619,27 @@ ggplot(
     color = "black"
   ) +
   
+  # Valores dentro/fora das barras
+  geom_text(
+    aes(
+      y = label_pos,
+      
+      label = scales::dollar(
+        faturamento,
+        prefix = "R$ ",
+        big.mark = ".",
+        decimal.mark = ",",
+        accuracy = 0.01
+      ),
+      
+      hjust = hjust_pos
+    ),
+    
+    size = 4,
+    fontface = "bold",
+    color = "black"
+  ) +
+  
   coord_flip() +
   
   scale_fill_gradient(
@@ -416,8 +651,11 @@ ggplot(
     labels = scales::label_dollar(
       prefix = "R$ ",
       big.mark = ".",
-      decimal.mark = ","
-    )
+      decimal.mark = ",",
+      accuracy = 0.01
+    ),
+    
+    expand = expansion(mult = c(0, 0.12))
   ) +
   
   labs(
@@ -468,8 +706,24 @@ Essa análise auxilia:
 # Lucro por Produto
 
 ```{r}
+top_products_lucro <- top_products %>%
+  
+  mutate(
+    label_pos = ifelse(
+      lucro > max(lucro) * 0.15,
+      lucro * 0.98,   # dentro da barra
+      lucro * 1.03    # fora da barra
+    ),
+    
+    hjust_pos = ifelse(
+      lucro > max(lucro) * 0.15,
+      1.1,   # alinhamento interno
+      0      # alinhamento externo
+    )
+  )
+
 ggplot(
-  top_products,
+  top_products_lucro,
   aes(
     x = forcats::fct_reorder(produto, lucro),
     y = lucro,
@@ -482,23 +736,47 @@ ggplot(
     color = "black"
   ) +
   
+  # Valores dentro/fora das barras
+  geom_text(
+    aes(
+      y = label_pos,
+      
+      label = scales::dollar(
+        lucro,
+        prefix = "R$ ",
+        big.mark = ".",
+        decimal.mark = ",",
+        accuracy = 0.01
+      ),
+      
+      hjust = hjust_pos
+    ),
+    
+    size = 4,
+    fontface = "bold",
+    color = "black"
+  ) +
+  
   coord_flip() +
   
   scale_fill_gradient(
     low = "#CDB4FF",
-    high = "#6A0DAD"
+    high = "#985698"
   ) +
   
   scale_y_continuous(
     labels = scales::label_dollar(
       prefix = "R$ ",
       big.mark = ".",
-      decimal.mark = ","
-    )
+      decimal.mark = ",",
+      accuracy = 0.01
+    ),
+    
+    expand = expansion(mult = c(0, 0.12))
   ) +
   
   labs(
-    title = "",
+    title = "Top 10 Produtos por Lucro",
     subtitle = "Produtos com maior contribuição para o lucro",
     x = "Produto",
     y = "Lucro"
@@ -542,88 +820,6 @@ Produtos com baixo lucro podem exigir:
 * Revisão de preços
 * Redução de custos
 * Reavaliação da estratégia comercial
-
-\newpage
-
-# Comparativo: Faturamento vs Lucro
-
-```{r}
-comparison_df <- tibble(
-  Indicador = c("Faturamento", "Lucro"),
-  Valor = c(
-    kpis$faturamento_total,
-    kpis$lucro_total
-  )
-)
-
-ggplot(
-  comparison_df,
-  aes(
-    x = Indicador,
-    y = Valor,
-    fill = Indicador
-  )
-) +
-  geom_col(
-    width = 0.6,
-    color = "black"
-  ) +
-  
-  scale_fill_manual(
-    values = c(
-      "Faturamento" = "#1F77B4",
-      "Lucro" = "#2CA02C"
-    )
-  ) +
-  
-  scale_y_continuous(
-    labels = scales::label_dollar(
-      prefix = "R$ ",
-      big.mark = ".",
-      decimal.mark = ","
-    )
-  ) +
-  
-  labs(
-    title = "",
-    subtitle = "Visão financeira consolidada",
-    x = "",
-    y = "Valor"
-  ) +
-  
-  theme_minimal(base_size = 14) +
-  
-  theme(
-    legend.position = "none",
-    
-    plot.title = element_text(
-      face = "bold",
-      size = 16
-    ),
-    
-    plot.subtitle = element_text(
-      size = 12,
-      color = "gray40"
-    ),
-    
-    axis.text.x = element_text(
-      face = "bold",
-      size = 12
-    )
-  )
-```
-
-## Interpretação Financeira Geral
-
-A diferença entre faturamento e lucro representa os custos envolvidos
-na operação.
-
-Essa visualização ajuda a compreender:
-
-* Eficiência financeira
-* Sustentabilidade operacional
-* Rentabilidade do negócio
-* Impacto dos custos sobre a receita
 
 \newpage
 
