@@ -29,8 +29,6 @@ O **SalesPipeline** é um projeto desenvolvido com foco em:
 O sistema executa um pipeline completo de processamento de vendas,
 transformando dados brutos em métricas estratégicas, relatórios executivos e DashBoard.
 
----
-
 ## Estrutura do Projeto
 
 ⚠️Observação: os projetos em linguagem R se diferenciam de outras linguagens no que diz respeito à estrutura de diretórios. Em linguagens como Python ou Php, por exemplo, modulariza-se o sistema, geralmente, por intermédio de diretórios, por exemplo: utils, src, db, logger, helpers, entre outros. No R, entretanto, é mais indicado manter as funções principais em um único diretório chamado 'R'. Este estilo de construção é chamado 'package', ou seja, é construído como um pacote da linguagem R. Com isso, além de muitos outros benefícios, a aplicação pode ser documentada (documentação dinâmica com roxygen2) e testada (testes unitários com testthat) com maior consistência. 
@@ -101,8 +99,6 @@ salespipeline/
       └── testthat.R
 ```
 
----
-
 ## Arquitetura do Projeto
 
 ```
@@ -140,8 +136,6 @@ salespipeline/
           └──────────────────┘
 ```
 
----
-
 # Stack Tecnológica
 
 | Tecnologia | Finalidade |
@@ -157,12 +151,11 @@ salespipeline/
 | devtools | Desenvolvimento |
 | roxygen2 | Documentação |
 | testthat | Testes unitários |
+| RStudio | IDE |
 | RMySQL | Driver MySQL |
 | shiny | DashBoard |
 | apache | Servidor |
 | MariaDB | Banco de Dados |
-
----
 
 ## Observabilidade
 
@@ -182,8 +175,6 @@ O projeto possui logging estruturado com rastreamento completo da execução.
 [2026-05-18 22:23:36.096705] DEBUG - Abrindo conexão MySQL em localhost:3306
 ```
 
----
-
 ## Diferenciais do Projeto
 
 * Arquitetura desacoplada (pipeline vs relatório vs dashboard)
@@ -193,14 +184,10 @@ O projeto possui logging estruturado com rastreamento completo da execução.
 * Código organizado e escalável
 * Foco em insight de negócio, não apenas código
 
----
-
 ## Documentação
 
 - `roxygen2`
 - Documentação Dinâmica
-
----
 
 ## Testes Automatizados
 
@@ -208,8 +195,6 @@ O projeto possui logging estruturado com rastreamento completo da execução.
 - Cobertura de regras de negócio
 - Validações estruturais
 - Testes unitários
-
----
 
 ## Modo de Utilização
 
@@ -257,12 +242,8 @@ renv::restore()
 * Ou, no console, digite: ```shiny::runApp("app")```
 * Após abertura de uma janela com o DashBoard, existe um botão na parte superior que, caso queira, o DashBoard poderá ser visualizado também no navegador. 
 
----
-
 ## Licença
 Este projeto está licenciado sob MIT License.
-
----
 
 ## Desenvolvedor focado em:
 
@@ -272,8 +253,6 @@ Este projeto está licenciado sob MIT License.
 - Python Programming
 - Automação de processos
 - Engenharia de Software
-
----
 
 ## Contato
 * Autor: Carlos da Costa
