@@ -136,7 +136,7 @@ salespipeline/
           └──────────────────┘
 ```
 
-# Stack Tecnológica
+## Stack Tecnológica
 
 | Tecnologia | Finalidade |
 |---|---|
@@ -233,7 +233,6 @@ renv::restore()
 ```
 ### 4. Gerar relatório PDF:
 * Acesse o arquivo do relatótio: ```salespipeline/reports/report.Rmd``` e clique no botão ```Knit```
-* Ou, acesse o arquivo do relatótio: ```salespipeline/reports/report.Rmd``` e use o atalho ```Ctrl + Shift + K```
 * Ou, simplesmente, no console, digite: ```rmarkdown::render("reports/report_sales_pipeline.Rmd")```
 * Qualquer um desses procedimentos vai gerar um relatório em PDF
 
