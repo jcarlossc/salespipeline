@@ -13,6 +13,39 @@ Sistema completo de ETL, métricas, observabilidade e geração de relatórios e
 
 </div>
 
+## Relatório e DashBoard
+
+[📄 Ver relatório completo](report/report.pdf)<br>
+[📥 Baixar relatório completo](https://github.com/jcarlossc/pipeline-mysql-rmarkdown/blob/main/report/report.pdf)
+
+## Imagens 
+Relatório:
+<table>
+  <tr>
+    <td><img src="https://github.com/jcarlossc/salespipeline/blob/main/images/report/report_01.png" alt="Imagem Relatório" width="200"/> </td>
+    <td><img src="https://github.com/jcarlossc/salespipeline/blob/main/images/report/report_02.png" alt="Imagem Relatório" width="200"/> </td>
+    <td><img src="https://github.com/jcarlossc/salespipeline/blob/main/images/report/report_03.png" alt="Imagem Relatório" width="200"/> </td>
+    <td><img src="https://github.com/jcarlossc/salespipeline/blob/main/images/report/report_04.png" alt="Imagem Relatório" width="200"/> </td>
+    <td><img src="https://github.com/jcarlossc/salespipeline/blob/main/images/report/report_05.png" alt="Imagem Relatório" width="200"/> </td>
+    <td><img src="https://github.com/jcarlossc/salespipeline/blob/main/images/report/report_06.png" alt="Imagem Relatório" width="200"/> </td>
+    <td><img src="https://github.com/jcarlossc/salespipeline/blob/main/images/report/report_07.png" alt="Imagem Relatório" width="200"/> </td>
+    <td><img src="https://github.com/jcarlossc/salespipeline/blob/main/images/report/report_08.png" alt="Imagem Relatório" width="200"/> </td>
+    <td><img src="https://github.com/jcarlossc/salespipeline/blob/main/images/report/report_09.png" alt="Imagem Relatório" width="200"/> </td>
+    <td><img src="https://github.com/jcarlossc/salespipeline/blob/main/images/report/report_10.png" alt="Imagem Relatório" width="200"/> </td>
+  </tr>
+</table>
+DashBoard:
+<table>
+  <tr>
+    <td><img src="https://github.com/jcarlossc/salespipeline/blob/main/images/dashboard/dashboard_01.png" alt="Imagem DashBoard" width="200"/> </td>
+    <td><img src="https://github.com/jcarlossc/salespipeline/blob/main/images/dashboard/dashboard_02.png" alt="Imagem DashBoard" width="200"/> </td>
+    <td><img src="https://github.com/jcarlossc/salespipeline/blob/main/images/dashboard/dashboard_03.png" alt="Imagem DashBoard" width="200"/> </td>
+    <td><img src="https://github.com/jcarlossc/salespipeline/blob/main/images/dashboard/dashboard_04.png" alt="Imagem DashBoard" width="200"/> </td>
+    <td><img src="https://github.com/jcarlossc/salespipeline/blob/main/images/dashboard/dashboard_05.png" alt="Imagem DashBoard" width="200"/> </td>
+  </tr>
+</table>
+
+
 ## Sobre o Projeto
 
 O **SalesPipeline** é um projeto desenvolvido com foco em:
