@@ -13,10 +13,7 @@ Sistema completo de ETL, métricas, observabilidade e geração de relatórios e
 
 </div>
 
-## Relatório e DashBoard
-
-[📄 Ver relatório completo](report/report.pdf)<br>
-[📥 Baixar relatório completo](https://github.com/jcarlossc/pipeline-mysql-rmarkdown/blob/main/report/report.pdf)
+---
 
 ## Imagens 
 Relatório:
