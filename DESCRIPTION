@@ -4,8 +4,8 @@ Title: What the Package Does (Title Case)
 Version: 0.1.0
 Authors@R: c(
     person(
-      "Jane", "Doe",
-      email = "jane@example.com",
+      "Carlos", "da Costa",
+      email = "jcarlossc1977@gmail.com",
       role = c("aut", "cre")
     )
   )
